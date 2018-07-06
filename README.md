@@ -1,5 +1,7 @@
 # Swashbuckle.Orleans.SwaggerGen
 
+## Orleans based on Swashbuckle survival Swagger document component
+
 IServiceCollection configuration.
 
 ```
@@ -30,3 +32,4 @@ Get the survival swagger Json documentation.
 string json = await Startup.CreateCluster().GrainFactory.GetGrain<ISwaggerGenGrain>(Guid.NewGuid()).Generator();
 
 ```
+  
