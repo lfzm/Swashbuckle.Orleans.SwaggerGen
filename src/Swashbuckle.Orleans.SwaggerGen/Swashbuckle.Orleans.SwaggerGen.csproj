@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator.Build" Version="2.0.3" />
     <PackageReference Include="Moq" Version="4.8.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="2.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
   </ItemGroup>
 
 </Project>
