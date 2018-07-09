@@ -157,8 +157,9 @@ namespace Swashbuckle.Orleans.SwaggerGen
         private GrainKeyParamterInfo ResolveGrainKey(MethodInfo method)
         {
             Type type = method.DeclaringType;
-            if (!this.options.GrainInterfaceGrainKeyAsName.TryGetValue(type, out string grainKeyName))
-                grainKeyName = "grainKey";
+            if (!this.options.GrainInterfaceGrainKeyAsName.TryGetValue(type, out GrainKeyDescription keyDescription))
+                keyDescription = new GrainKeyDescription("grainKey", "");
+
             Type grainType;
             if (typeof(IGrainWithGuidCompoundKey).IsAssignableFrom(type) || typeof(IGrainWithGuidKey).IsAssignableFrom(type))
                 grainType = typeof(Guid);
@@ -169,7 +170,11 @@ namespace Swashbuckle.Orleans.SwaggerGen
             else
                 return null;
 
-            return new GrainKeyParamterInfo(grainKeyName, grainType, method);
+            //When setting the method does not require GrainKey, set to Guid
+            if (keyDescription.NoNeedKeyMethod.Exists(f=>f.Equals(method.Name,StringComparison.OrdinalIgnoreCase)))
+                grainType = typeof(Guid);
+
+            return new GrainKeyParamterInfo(keyDescription.Name, grainType, method);
         }
     }
 }

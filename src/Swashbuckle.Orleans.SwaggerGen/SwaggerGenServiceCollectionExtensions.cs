@@ -14,10 +14,23 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Action<OrleansSwaggerGenOptions> orleansOption, Action<SwaggerGenOptions> swaggerAction = null)
         {
-            services.AddSwaggerGen(swaggerAction);
-            services.Configure<OrleansSwaggerGenOptions>(option =>
+            OrleansSwaggerGenOptions swaggerGenOptions = new OrleansSwaggerGenOptions();
+            orleansOption.Invoke(swaggerGenOptions);
+
+            services.AddSwaggerGen(opt =>
             {
-                orleansOption.Invoke(option);
+                opt.ParameterFilter<GrainKeyParmeterFilter>(swaggerGenOptions);
+                swaggerAction?.Invoke(opt);
+            });
+            services.Configure<OrleansSwaggerGenOptions>(opt=>
+            {
+                opt.BasePath = swaggerGenOptions.BasePath;
+                opt.DocumentName = swaggerGenOptions.DocumentName;
+                opt.GrainAssembly = swaggerGenOptions.GrainAssembly;
+                opt.GrainInterfaceGrainKeyAsName = swaggerGenOptions.GrainInterfaceGrainKeyAsName;
+                opt.GrainInterfaceNameExtractRegexString = swaggerGenOptions.GrainInterfaceNameExtractRegexString;
+                opt.Host = swaggerGenOptions.Host;
+                opt.Schemes = swaggerGenOptions.Schemes;
             });
             services.AddSingleton<IApiDescriptionGroupCollectionProvider, OrleansApiDescriptionGroupCollectionProvider>();
             return services;

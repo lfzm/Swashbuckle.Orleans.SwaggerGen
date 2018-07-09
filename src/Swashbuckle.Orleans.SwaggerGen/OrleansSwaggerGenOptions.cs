@@ -14,13 +14,11 @@ namespace Swashbuckle.Orleans.SwaggerGen
         public List<string> Schemes { get; set; } = new List<string>();
         public Assembly GrainAssembly { get; set; }
         public string GrainInterfaceNameExtractRegexString { get; set; } = "(?<=(I))[.\\s\\S]*?(?=(Service))";
-
         public Regex GrainInterfaceNameExtractRegex { get
             {
                 return new Regex(this.GrainInterfaceNameExtractRegexString, RegexOptions.Multiline | RegexOptions.Singleline);
             } }
-        public Dictionary<Type, string> GrainInterfaceGrainKeyAsName { get; set; } = new Dictionary<Type, string>();
+        public Dictionary<Type, GrainKeyDescription> GrainInterfaceGrainKeyAsName { get; set; } = new Dictionary<Type, GrainKeyDescription>();
 
-        public Action<SwaggerGenOptions> SwaggerGenAction { get; set; }
     }
 }

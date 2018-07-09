@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Orleans;
@@ -23,6 +24,36 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
             }));
             var gr = apiDescriptionsProvider.ApiDescriptionGroups;
             Assert.NotNull(gr);
+        }
+        [Fact]
+        public async  void GetSwagger_ServiceCollection()
+        {
+            IServiceCollection services = new ServiceCollection();
+            services.AddTransient<ISwaggerGenGrain, SwaggerGenGrain>();
+            services.AddOrleansSwaggerGen((OrleansSwaggerGenOptions options) =>
+            {
+                options.GrainAssembly = typeof(GetTest).Assembly;
+                options.DocumentName = "test";
+                options.Host = "www.xxx.com";
+                options.Schemes.Add("http");
+                options.GrainInterfaceGrainKeyAsName.Add(typeof(IGrainTestService), new GrainKeyDescription("userId", "ÓÃ»§ID"));
+            },
+            (SwaggerGenOptions options) =>
+            {
+                //var basePath = Path.GetDirectoryName(typeof(IGrainTestService).Assembly.Location);
+                //var xmlPath = Path.Combine(basePath, "Zop.Otc.xml");
+                //options.IncludeXmlComments(xmlPath);
+
+                options.SwaggerDoc("test", new Swashbuckle.AspNetCore.Swagger.Info()
+                {
+                    Title = "test API",
+                    Version = "1.0.0"
+                });
+            });
+            var serviceProvider = services.BuildServiceProvider();
+
+            var ser = serviceProvider.GetRequiredService<ISwaggerGenGrain>();
+            string json = await  ser.Generator();
         }
         [Fact]
         public void GetSwagger()
@@ -77,7 +108,7 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
         Task<Result> Add(UserInfo user);
     }
 
-    public class IGer : Grain, IGrainTestService
+    public class GetTest : Grain, IGrainTestService
     {
         public Task<string> GetValue(UserInfo user)
         {
