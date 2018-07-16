@@ -171,7 +171,10 @@ namespace Swashbuckle.Orleans.SwaggerGen
                 return null;
 
             //When setting the method does not require GrainKey, set to Guid
-            if (keyDescription.NoNeedKeyMethod.Exists(f=>f.Equals(method.Name,StringComparison.OrdinalIgnoreCase)))
+            if (keyDescription.NoNeedKeyMethod.Exists(f => f.Equals("_ALL_")))
+                grainType = typeof(Guid);
+
+            if (keyDescription.NoNeedKeyMethod.Exists(f => f.Equals(method.Name, StringComparison.OrdinalIgnoreCase)))
                 grainType = typeof(Guid);
 
             return new GrainKeyParamterInfo(keyDescription.Name, grainType, method);

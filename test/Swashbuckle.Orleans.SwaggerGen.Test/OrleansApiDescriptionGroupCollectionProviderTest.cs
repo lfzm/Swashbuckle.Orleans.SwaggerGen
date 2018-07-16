@@ -44,7 +44,7 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
                 //var xmlPath = Path.Combine(basePath, "Zop.Otc.xml");
                 //options.IncludeXmlComments(xmlPath);
 
-                options.SwaggerDoc("test", new Swashbuckle.AspNetCore.Swagger.Info()
+                options.SwaggerDoc("test", new Info()
                 {
                     Title = "test API",
                     Version = "1.0.0"
