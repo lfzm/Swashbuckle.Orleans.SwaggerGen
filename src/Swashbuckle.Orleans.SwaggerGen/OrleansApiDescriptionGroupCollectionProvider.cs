@@ -58,9 +58,8 @@ namespace Swashbuckle.Orleans.SwaggerGen
                     {
                         string httpMethod = "POST";
                         var grainKey = this.ResolveGrainKey(method);
-                        string controllerName = this.options.GrainInterfaceNameExtractRegex.Match(method.DeclaringType.Name).Value;
-                        string routeTemplate = $"/{controllerName}/{method.Name}";
-                        return CreateActionDescriptor(httpMethod, routeTemplate, method, controllerName, grainKey);
+                        var apiRoute = this.options.SetApiRouteTemplateFunc(method);
+                        return CreateActionDescriptor(httpMethod, apiRoute.RouteTemplate, method, apiRoute.ControllerName, grainKey);
                     })
                     .ToList();
         }
@@ -171,7 +170,7 @@ namespace Swashbuckle.Orleans.SwaggerGen
                 return null;
 
             //When setting the method does not require GrainKey, set to Guid
-            if (keyDescription.NoNeedKeyMethod.Exists(f => f.Equals("_ALL_")))
+            if (keyDescription.IgnoreGrainKey)
                 grainType = typeof(Guid);
 
             if (keyDescription.NoNeedKeyMethod.Exists(f => f.Equals(method.Name, StringComparison.OrdinalIgnoreCase)))

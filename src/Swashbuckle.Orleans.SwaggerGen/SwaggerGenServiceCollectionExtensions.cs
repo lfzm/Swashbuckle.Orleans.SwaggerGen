@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 opt.DocumentName = swaggerGenOptions.DocumentName;
                 opt.GrainAssembly = swaggerGenOptions.GrainAssembly;
                 opt.GrainInterfaceGrainKeyAsName = swaggerGenOptions.GrainInterfaceGrainKeyAsName;
-                opt.GrainInterfaceNameExtractRegexString = swaggerGenOptions.GrainInterfaceNameExtractRegexString;
+                opt.SetApiRouteTemplateFunc = swaggerGenOptions.SetApiRouteTemplateFunc;
                 opt.Host = swaggerGenOptions.Host;
                 opt.Schemes = swaggerGenOptions.Schemes;
             });

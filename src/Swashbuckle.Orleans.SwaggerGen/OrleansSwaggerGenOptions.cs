@@ -8,17 +8,19 @@ namespace Swashbuckle.Orleans.SwaggerGen
 {
     public class OrleansSwaggerGenOptions
     {
+        public OrleansSwaggerGenOptions()
+        {
+            this.SetApiRouteTemplateFunc = (m) => new WebApiRoute(m.DeclaringType.Name, $"/{m.DeclaringType.Name}/{m.Name}");
+        }
         public string DocumentName { get; set; }
         public string Host { get; set; }
         public string BasePath { get; set; }
         public List<string> Schemes { get; set; } = new List<string>();
         public Assembly GrainAssembly { get; set; }
-        public string GrainInterfaceNameExtractRegexString { get; set; } = "(?<=(I))[.\\s\\S]*?(?=(Service))";
-        public Regex GrainInterfaceNameExtractRegex { get
-            {
-                return new Regex(this.GrainInterfaceNameExtractRegexString, RegexOptions.Multiline | RegexOptions.Singleline);
-            } }
+      
         public Dictionary<Type, GrainKeyDescription> GrainInterfaceGrainKeyAsName { get; set; } = new Dictionary<Type, GrainKeyDescription>();
+
+        public Func<MethodInfo, WebApiRoute> SetApiRouteTemplateFunc { get; set; }
 
     }
 }

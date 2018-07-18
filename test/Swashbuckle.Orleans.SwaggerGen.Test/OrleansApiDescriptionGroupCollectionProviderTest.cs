@@ -8,6 +8,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,7 +27,7 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
             Assert.NotNull(gr);
         }
         [Fact]
-        public async  void GetSwagger_ServiceCollection()
+        public async void GetSwagger_ServiceCollection()
         {
             IServiceCollection services = new ServiceCollection();
             services.AddTransient<ISwaggerGenGrain, SwaggerGenGrain>();
@@ -37,6 +38,13 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
                 options.Host = "www.xxx.com";
                 options.Schemes.Add("http");
                 options.GrainInterfaceGrainKeyAsName.Add(typeof(IGrainTestService), new GrainKeyDescription("userId", "ÓÃ»§ID"));
+                options.SetApiRouteTemplateFunc = (m) =>
+                {
+                    var regex = new Regex("(?<=(I))[.\\s\\S]*?(?=(Service))", RegexOptions.Multiline | RegexOptions.Singleline);
+                    string controllerName = regex.Match(m.DeclaringType.Name).Value;
+                    string routeTemplate = $"/uc/{controllerName}/{m.Name}";
+                    return new WebApiRoute(controllerName, routeTemplate);
+                };
             },
             (SwaggerGenOptions options) =>
             {
@@ -53,7 +61,7 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
             var serviceProvider = services.BuildServiceProvider();
 
             var ser = serviceProvider.GetRequiredService<ISwaggerGenGrain>();
-            string json = await  ser.Generator();
+            string json = await ser.Generator();
         }
         [Fact]
         public void GetSwagger()
