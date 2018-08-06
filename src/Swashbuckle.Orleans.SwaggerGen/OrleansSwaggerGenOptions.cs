@@ -17,10 +17,10 @@ namespace Swashbuckle.Orleans.SwaggerGen
         public string BasePath { get; set; }
         public List<string> Schemes { get; set; } = new List<string>();
         public Assembly GrainAssembly { get; set; }
-      
         public Dictionary<Type, GrainKeyDescription> GrainInterfaceGrainKeyAsName { get; set; } = new Dictionary<Type, GrainKeyDescription>();
-
         public Func<MethodInfo, WebApiRoute> SetApiRouteTemplateFunc { get; set; }
+        public List<string> IgnoreGrainInterfaces { get; set; } = new List<string>();
+        public List<string> IgnoreGrainMethods { get; set; } = new List<string>();
 
     }
 }

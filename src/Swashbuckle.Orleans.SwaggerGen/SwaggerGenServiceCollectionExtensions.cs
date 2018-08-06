@@ -22,16 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 opt.ParameterFilter<GrainKeyParmeterFilter>(swaggerGenOptions);
                 swaggerAction?.Invoke(opt);
             });
-            services.Configure<OrleansSwaggerGenOptions>(opt=>
-            {
-                opt.BasePath = swaggerGenOptions.BasePath;
-                opt.DocumentName = swaggerGenOptions.DocumentName;
-                opt.GrainAssembly = swaggerGenOptions.GrainAssembly;
-                opt.GrainInterfaceGrainKeyAsName = swaggerGenOptions.GrainInterfaceGrainKeyAsName;
-                opt.SetApiRouteTemplateFunc = swaggerGenOptions.SetApiRouteTemplateFunc;
-                opt.Host = swaggerGenOptions.Host;
-                opt.Schemes = swaggerGenOptions.Schemes;
-            });
+            services.Configure<OrleansSwaggerGenOptions>(orleansOption);
             services.AddSingleton<IApiDescriptionGroupCollectionProvider, OrleansApiDescriptionGroupCollectionProvider>();
             return services;
         }

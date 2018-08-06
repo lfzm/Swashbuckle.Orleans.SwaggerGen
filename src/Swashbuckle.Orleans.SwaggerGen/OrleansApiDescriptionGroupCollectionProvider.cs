@@ -50,18 +50,19 @@ namespace Swashbuckle.Orleans.SwaggerGen
         private List<ControllerActionDescriptor> CreateActionDescriptors()
         {
             return options.GrainAssembly.GetTypes()
-                  .Where(type => typeof(Grain).IsAssignableFrom(type) && type.IsClass && !type.IsInterface && !type.IsAbstract && !type.IsGenericType && type.IsPublic)
-                  .SelectMany(grain => grain.GetInterfaces())
-                  .Where(type => typeof(IGrain).IsAssignableFrom(type) && type.IsPublic && !type.IsGenericType && type.Module.Name != "Orleans.Core.Abstractions.dll")
+                  .Where(type => typeof(IGrain).IsAssignableFrom(type) && type.IsPublic && type.IsInterface && !type.IsGenericType && type.Module.Name != "Orleans.Core.Abstractions.dll" && !this.options.IgnoreGrainInterfaces.Exists(f => type.Name.Equals(f, StringComparison.OrdinalIgnoreCase)))
                   .SelectMany(interfaceType => interfaceType.GetMethods())
-                    .Select(method =>
-                    {
-                        string httpMethod = "POST";
-                        var grainKey = this.ResolveGrainKey(method);
-                        var apiRoute = this.options.SetApiRouteTemplateFunc(method);
-                        return CreateActionDescriptor(httpMethod, apiRoute.RouteTemplate, method, apiRoute.ControllerName, grainKey);
-                    })
-                    .ToList();
+                  .Where(method => method.IsPublic && !this.options.IgnoreGrainMethods.Exists(t =>
+                  { return method.Name.Equals(t, StringComparison.OrdinalIgnoreCase); }
+                  ))
+                  .Select(method =>
+                  {
+                      string httpMethod = "POST";
+                      var grainKey = this.ResolveGrainKey(method);
+                      var apiRoute = this.options.SetApiRouteTemplateFunc(method);
+                      return CreateActionDescriptor(httpMethod, apiRoute.RouteTemplate, method, apiRoute.ControllerName, grainKey);
+                  })
+                  .ToList();
         }
 
         private ControllerActionDescriptor CreateActionDescriptor(string httpMethod, string routeTemplate, MethodInfo methodInfo,
