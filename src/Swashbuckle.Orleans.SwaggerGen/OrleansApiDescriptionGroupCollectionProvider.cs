@@ -53,7 +53,9 @@ namespace Swashbuckle.Orleans.SwaggerGen
                   .Where(type => typeof(IGrain).IsAssignableFrom(type) && type.IsPublic && type.IsInterface && !type.IsGenericType && type.Module.Name != "Orleans.Core.Abstractions.dll" && !this.options.IgnoreGrainInterfaces.Exists(f => type.Name.Equals(f, StringComparison.OrdinalIgnoreCase)))
                   .SelectMany(interfaceType => interfaceType.GetMethods())
                   .Where(method => method.IsPublic && !this.options.IgnoreGrainMethods.Exists(t =>
-                  { return method.Name.Equals(t, StringComparison.OrdinalIgnoreCase); }
+                  {
+                      return (method.DeclaringType.Name + "." + method.Name).Equals(t, StringComparison.OrdinalIgnoreCase);
+                  }
                   ))
                   .Select(method =>
                   {

@@ -45,7 +45,7 @@ namespace Swashbuckle.Orleans.SwaggerGen.Test
                     string routeTemplate = $"/uc/{controllerName}/{m.Name}";
                     return new WebApiRoute(controllerName, routeTemplate);
                 };
-                options.IgnoreGrainMethods.Add("add");
+                options.IgnoreGrainMethods.Add(nameof(IGrainTestService) +".add");
                 //options.IgnoreGrainInterfaces.Add(nameof(IGrainTestService));
             },
             (SwaggerGenOptions options) =>
