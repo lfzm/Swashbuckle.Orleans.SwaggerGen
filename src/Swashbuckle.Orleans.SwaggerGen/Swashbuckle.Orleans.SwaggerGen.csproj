@@ -3,7 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>3.0.0-bate7</Version>
+    <Version>3.0.2</Version>
+    <Authors>aqa510415008</Authors>
+    <Company>aling</Company>
+    <Description>Orleans based on Swashbuckle survival Swagger document component</Description>
+    <Copyright />
+    <PackageProjectUrl>https://github.com/aqa510415008/Swashbuckle.Orleans.SwaggerGen</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/aqa510415008/Swashbuckle.Orleans.SwaggerGen</RepositoryUrl>
+    <PackageTags>Orleans Swashbuckle Swagger APIDocument</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

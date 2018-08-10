@@ -11,6 +11,9 @@ namespace Swashbuckle.Orleans.SwaggerGen
         public OrleansSwaggerGenOptions()
         {
             this.SetApiRouteTemplateFunc = (m) => new WebApiRoute(m.DeclaringType.Name, $"/{m.DeclaringType.Name}/{m.Name}");
+            this.IgnoreGrainInterfaces = (t) => false;
+            this.IgnoreGrainMethods = (m) => false;
+
         }
         public string DocumentName { get; set; }
         public string Host { get; set; }
@@ -19,8 +22,8 @@ namespace Swashbuckle.Orleans.SwaggerGen
         public Assembly GrainAssembly { get; set; }
         public Dictionary<Type, GrainKeyDescription> GrainInterfaceGrainKeyAsName { get; set; } = new Dictionary<Type, GrainKeyDescription>();
         public Func<MethodInfo, WebApiRoute> SetApiRouteTemplateFunc { get; set; }
-        public List<string> IgnoreGrainInterfaces { get; set; } = new List<string>();
-        public List<string> IgnoreGrainMethods { get; set; } = new List<string>();
+        public Func<Type,bool> IgnoreGrainInterfaces { get; set; }
+        public Func<MethodInfo, bool> IgnoreGrainMethods { get; set; } 
 
     }
 }

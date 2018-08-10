@@ -50,13 +50,9 @@ namespace Swashbuckle.Orleans.SwaggerGen
         private List<ControllerActionDescriptor> CreateActionDescriptors()
         {
             return options.GrainAssembly.GetTypes()
-                  .Where(type => typeof(IGrain).IsAssignableFrom(type) && type.IsPublic && type.IsInterface && !type.IsGenericType && type.Module.Name != "Orleans.Core.Abstractions.dll" && !this.options.IgnoreGrainInterfaces.Exists(f => type.Name.Equals(f, StringComparison.OrdinalIgnoreCase)))
+                  .Where(type => typeof(IGrain).IsAssignableFrom(type) && type.IsPublic && type.IsInterface && !type.IsGenericType && type.Module.Name != "Orleans.Core.Abstractions.dll" && !this.options.IgnoreGrainInterfaces.Invoke(type))
                   .SelectMany(interfaceType => interfaceType.GetMethods())
-                  .Where(method => method.IsPublic && !this.options.IgnoreGrainMethods.Exists(t =>
-                  {
-                      return (method.DeclaringType.Name + "." + method.Name).Equals(t, StringComparison.OrdinalIgnoreCase);
-                  }
-                  ))
+                  .Where(method => method.IsPublic && !this.options.IgnoreGrainMethods.Invoke(method))
                   .Select(method =>
                   {
                       string httpMethod = "POST";
